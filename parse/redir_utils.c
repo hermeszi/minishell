@@ -12,25 +12,27 @@
 
 #include "minishell.h"
 
-static int	handle_redirin(t_redir *re, t_exe **x, t_shell **shell, t_exebox **box)
+static int	handle_redirin(t_redir *re, t_exe **x, t_shell **s, t_exebox **box)
 {
 	closeput((*x)->puts[0], -1);
 	if (access(re->file, F_OK) == -1)
-		return (filenotexisterr(re->file, shell), 1);
+		return (filenotexisterr(re->file, s), 1);
 	else if (access(re->file, F_OK | R_OK) == -1)
-		return (permissiondeniederr(re->file, shell), 1);
+		return (permissiondeniederr(re->file, s), 1);
 	(*x)->puts[0] = open(re->file, O_RDONLY, 0644);
 	if ((*x)->puts[0] == -1)
-		return (ft_exit(shell, NULL, box), 1);
+		return (ft_exit(s, NULL, box), 1);
 	return (0);
 }
 
-static int	handle_redirappend(t_redir *re, t_exe **x, t_shell **shell)
+static int	handle_redirapp(t_redir *re, t_exe **x, t_shell **s, t_exebox **b)
 {
 	closeput(-1, (*x)->puts[1]);
 	if (access(re->file, F_OK) == 0 && access(re->file, W_OK) == -1)
-		return (permissiondeniederr(re->file, shell), 1);
+		return (permissiondeniederr(re->file, s), 1);
 	(*x)->puts[1] = open(re->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if ((*x)->puts[1] == -1)
+		return (ft_exit(s, NULL, b), 1);
 	return (0);
 }
 
@@ -52,6 +54,8 @@ static int	handle_hd(t_redir *re, t_exe **x, t_shell **shell, t_exebox **con)
 	if (hd == -1 || hd == 130)
 		return (130);
 	(*x)->puts[0] = open(HEREDOC_FILE, O_RDONLY, 0644);
+	if ((*x)->puts[0] == -1)
+		return (ft_exit(shell, NULL, con), 1);
 	if (con != NULL && *con != NULL)
 		(*con)->skipnl = 1;
 	return (1);
@@ -68,7 +72,7 @@ int	get_redir(t_redir *re, t_exe **x, t_shell **shell, t_exebox **con)
 		}
 		else if (re->type == TOKEN_APPEND)
 		{
-			if (handle_redirappend(re, x, shell) == 1)
+			if (handle_redirapp(re, x, shell, con) == 1)
 				return (1);
 		}
 		else if (re->type == TOKEN_REDIR_IN)

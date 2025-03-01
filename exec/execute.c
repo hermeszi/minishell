@@ -37,19 +37,19 @@ static void	init_exe(t_exe **exe, t_exebox **box, t_shell **shell, t_node *node)
 	wait_children(box, shell);
 }
 
-static int	redir_builtin(t_exe **exe, t_shell **shell, t_exebox **box, t_node *left)
+static int	redir_builtin(t_exe **exe, t_shell **s, t_exebox **b, t_node *left)
 {
 	int		valid;
 
 	initexenode(exe);
-	addchild(exe, box);
-	valid = get_redir(left->rootredir, exe, shell, box);
+	addchild(exe, b);
+	valid = get_redir(left->rootredir, exe, s, b);
 	if (ft_strcmp(left->args[0], "exit") == 1)
 		closeput((*exe)->puts[0], (*exe)->puts[1]);
-	(*shell)->exit_status = checkif_builtin(shell, left->args, box);
+	(*s)->exit_status = checkif_builtin(s, left->args, b);
 	closeput((*exe)->puts[0], (*exe)->puts[1]);
 	if (valid == 1)
-		(*shell)->exit_status = valid;
+		(*s)->exit_status = valid;
 	return (0);
 }
 
