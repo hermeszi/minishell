@@ -26,7 +26,10 @@ void	ft_coredump_msg(int status, t_shell **shell, t_exebox **con)
 			(*shell)->exit_status = ENOTRECOVERABLE;
 		}
 		if ((*con)->skipnl == 0)
+		{
 			write (1, "\n", 1);
+			(*con)->skipnl = 1;
+		}
 	}
 }
 

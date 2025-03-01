@@ -67,6 +67,6 @@ void	free_exe(t_exebox **exe);
 int		parsehd_expand(char *s, char *file, int filefd, t_shell **shell);
 void	handle_sigint(int filefd, t_shell **shell);
 void	handle_eof(int filefd);
-int		handle_redirout(t_redir *re, t_exe **x, t_shell **shell);
+int		handle_redirout(t_redir *re, t_exe **x, t_shell **shell, t_exebox **box);
 
 #endif
