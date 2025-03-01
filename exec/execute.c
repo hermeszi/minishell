@@ -44,7 +44,10 @@ static int	redir_builtin(t_exe **exe, t_shell **shell, t_exebox **box, t_node *l
 	initexenode(exe);
 	addchild(exe, box);
 	valid = get_redir(left->rootredir, exe, shell, box);
+	if (ft_strcmp(left->args[0], "exit") == 1)
+		closeput((*exe)->puts[0], (*exe)->puts[1]);
 	(*shell)->exit_status = checkif_builtin(shell, left->args, box);
+	closeput((*exe)->puts[0], (*exe)->puts[1]);
 	if (valid == 1)
 		(*shell)->exit_status = valid;
 	return (0);
@@ -60,7 +63,7 @@ static int	onlybuiltin(t_exebox **box, t_node *node, t_exe **exe, t_shell **s)
 		if (node->right == NULL)
 		{
 			if (node->left->rootredir != NULL)
-				redir_builtin(exe, s, box, left);//init_exe(exe, box, s, node);
+				redir_builtin(exe, s, box, left);
 			else
 				(*s)->exit_status = checkif_builtin(s, left->args, box);
 			if (ft_strcmp(left->args[0], "echo") == 1 && left->args[1] == NULL)
