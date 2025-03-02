@@ -30,14 +30,12 @@ void	executechild(t_node *node, t_exebox **con, t_shell **shell)
 	exe = (*con)->exes[(*con)->numpid - 1];
 	if ((exe)->puts[0] != STDIN_FILENO)
 	{
-		dup2((exe)->puts[0], STDIN_FILENO);
-		close((exe)->puts[0]);
+		dup_fd(exe, shell, con, 1);
 		close_pipefds(exe, node);
 	}
 	if ((exe)->puts[1] != STDOUT_FILENO)
 	{
-		dup2((exe)->puts[1], STDOUT_FILENO);
-		close((exe)->puts[1]);
+		dup_fd(exe, shell, con, 2);
 		close_pipefds(exe, node);
 	}
 	else if (node->right != NULL)

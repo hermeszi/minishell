@@ -51,19 +51,20 @@ static void	process_token_list(t_tokenizer *tok, t_token **head, t_shell *shell)
 		free_token_list(head);
 }
 
-int	tokenize(const char *input, t_token **head, t_shell *shell)
+int	tokenize(const char *input, t_token **head, t_shell **shell)
 {
 	t_tokenizer	tok;
 
-	init_tokenizer(&tok, input, shell);
+	init_tokenizer(&tok, input, *shell);
 	free_token_list(head);
-	process_token_list(&tok, head, shell);
+	process_token_list(&tok, head, *shell);
 	if (tok.error || !head)
 	{
 		if (tok.error)
 		{
 			ft_putstr_fd("Syntax Error : unclosed quotes or"
 				" other errors\n", STDERR_FILENO);
+			(*shell)->exit_status = 2;
 			free_token_list(head);
 			return (1);
 		}
@@ -71,6 +72,7 @@ int	tokenize(const char *input, t_token **head, t_shell *shell)
 	add_quotes_to_heredoc_tokens(*head);
 	while (node_split_id(*head) > -1)
 		split_node(head);
+	(*shell)->exit_status = 0;
 	if (validate_token_syntax(*head))
 		return (1);
 	return (0);

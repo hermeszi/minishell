@@ -18,7 +18,7 @@ static int	handle_redirin(t_redir *re, t_exe **x, t_shell **s, t_exebox **box)
 	if (access(re->file, F_OK) == -1)
 		return (filenotexisterr(re->file, s), 1);
 	else if (access(re->file, F_OK | R_OK) == -1)
-		return (permissiondeniederr(re->file, s), 1);
+		return ((*x)->puts[0] = STDIN_FILENO, permdenied(re->file, s), 1);
 	(*x)->puts[0] = open(re->file, O_RDONLY, 0644);
 	if ((*x)->puts[0] == -1)
 		return (ft_exit(s, NULL, box), 1);
@@ -29,7 +29,7 @@ static int	handle_redirapp(t_redir *re, t_exe **x, t_shell **s, t_exebox **b)
 {
 	closeput(-1, (*x)->puts[1]);
 	if (access(re->file, F_OK) == 0 && access(re->file, W_OK) == -1)
-		return (permissiondeniederr(re->file, s), 1);
+		return ((*x)->puts[1] = STDOUT_FILENO, permdenied(re->file, s), 1);
 	(*x)->puts[1] = open(re->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if ((*x)->puts[1] == -1)
 		return (ft_exit(s, NULL, b), 1);

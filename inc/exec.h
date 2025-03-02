@@ -68,5 +68,7 @@ int		parsehd_expand(char *s, char *file, int filefd, t_shell **shell);
 void	handle_sigint(int filefd, t_shell **shell);
 void	handle_eof(int filefd);
 int		handle_redirout(t_redir *re, t_exe **x, t_shell **s, t_exebox **b);
+void	dup_fd(t_exe *exe, t_shell **shell, t_exebox **box, int i);
+void	restore_fd(t_exebox **b, int ogout, int ogin, t_shell **shell);
 
 #endif

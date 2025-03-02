@@ -57,7 +57,7 @@ t_token			*new_token(char *value, t_token_type type, \
 				int split, int hd_add_quote);
 int				ms_is_special(char c);
 void			skip_whitespace(t_tokenizer *tok);
-int				tokenize(const char *input, t_token **head, t_shell *shell);
+int				tokenize(const char *input, t_token **head, t_shell **shell);
 void			free_token_list(t_token **head);
 t_token			*ft_tokenlast(t_token *lst);
 t_token			*handle_special_token(t_tokenizer *tok);

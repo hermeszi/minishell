@@ -52,7 +52,7 @@ static int	minishell_loop(char *input, t_token **tok, \
 			(*shell)->exit_status = 130;
 			g_received_sigint = 0;
 		}
-		if (tokenize(input, tok, *shell))
+		if (tokenize(input, tok, shell))
 		{
 			free(input);
 			continue ;
